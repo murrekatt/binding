@@ -237,9 +237,9 @@ func mapForm(formStruct reflect.Value, form map[string][]string,
 		formStruct = formStruct.Elem()
 	}
 
-	for fieldIdx := 0; fieldIdx < formStruct.Type().NumField(); fieldIdx++ {
-		typeField := formStruct.Type().Field(fieldIdx)
-		structField := formStruct.Field(fieldIdx)
+	for i := 0; i < formStruct.Type().NumField(); i++ {
+		typeField := formStruct.Type().Field(i)
+		structField := formStruct.Field(i)
 		mapFormField(typeField, structField, form, formfile, errors)
 	}
 }
@@ -297,8 +297,8 @@ func mapFormFieldSliceBuiltin(typeField reflect.StructField,
 	if numElems > 0 {
 		sliceOf := structField.Type().Elem().Kind()
 		slice := reflect.MakeSlice(structField.Type(), numElems, numElems)
-		for elemIdx := 0; elemIdx < numElems; elemIdx++ {
-			setWithProperType(sliceOf, inputValue[elemIdx], slice.Index(elemIdx), inputFieldName, errors)
+		for i := 0; i < numElems; i++ {
+			setWithProperType(sliceOf, inputValue[i], slice.Index(i), inputFieldName, errors)
 		}
 		structField.Set(slice)
 	}
@@ -344,8 +344,8 @@ func mapFormFieldMultipart(typeField reflect.StructField,
 	numElems := len(inputFile)
 	if structField.Kind() == reflect.Slice && numElems > 0 && structField.Type().Elem() == fhType {
 		slice := reflect.MakeSlice(structField.Type(), numElems, numElems)
-		for elemIdx := 0; elemIdx < numElems; elemIdx++ {
-			slice.Index(elemIdx).Set(reflect.ValueOf(inputFile[elemIdx]))
+		for i := 0; i < numElems; i++ {
+			slice.Index(i).Set(reflect.ValueOf(inputFile[i]))
 		}
 		structField.Set(slice)
 	} else if structField.Type() == fhType {
