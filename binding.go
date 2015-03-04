@@ -285,6 +285,12 @@ func mapFormFieldValue(inputFieldName string, typeField reflect.StructField,
 		return
 	}
 
+	mapFormFieldMultipart(inputFieldName, structField, formfile, errors)
+}
+
+func mapFormFieldMultipart(inputFieldName string, structField reflect.Value,
+	formfile map[string][]*multipart.FileHeader, errors Errors) {
+
 	inputFile, exists := formfile[inputFieldName]
 	if !exists {
 		return
