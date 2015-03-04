@@ -260,8 +260,8 @@ func mapForm(formStruct reflect.Value, form map[string][]string,
 				if structField.Kind() == reflect.Slice && numElems > 0 {
 					sliceOf := structField.Type().Elem().Kind()
 					slice := reflect.MakeSlice(structField.Type(), numElems, numElems)
-					for i := 0; i < numElems; i++ {
-						setWithProperType(sliceOf, inputValue[i], slice.Index(i), inputFieldName, errors)
+					for elemIdx := 0; elemIdx < numElems; elemIdx++ {
+						setWithProperType(sliceOf, inputValue[elemIdx], slice.Index(elemIdx), inputFieldName, errors)
 					}
 					structField.Set(slice)
 				} else {
@@ -278,8 +278,8 @@ func mapForm(formStruct reflect.Value, form map[string][]string,
 			numElems := len(inputFile)
 			if structField.Kind() == reflect.Slice && numElems > 0 && structField.Type().Elem() == fhType {
 				slice := reflect.MakeSlice(structField.Type(), numElems, numElems)
-				for i := 0; i < numElems; i++ {
-					slice.Index(i).Set(reflect.ValueOf(inputFile[i]))
+				for elemIdx := 0; elemIdx < numElems; elemIdx++ {
+					slice.Index(elemIdx).Set(reflect.ValueOf(inputFile[elemIdx]))
 				}
 				structField.Set(slice)
 			} else if structField.Type() == fhType {
