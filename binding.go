@@ -263,7 +263,7 @@ func mapForm(formStruct reflect.Value, form map[string][]string,
 					for i := 0; i < numElems; i++ {
 						setWithProperType(sliceOf, inputValue[i], slice.Index(i), inputFieldName, errors)
 					}
-					formStruct.Field(i).Set(slice)
+					structField.Set(slice)
 				} else {
 					setWithProperType(typeField.Type.Kind(), inputValue[0], structField, inputFieldName, errors)
 				}
