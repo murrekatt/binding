@@ -237,9 +237,9 @@ func mapForm(formStruct reflect.Value, form map[string][]string,
 		formStruct = formStruct.Elem()
 	}
 
-	for i := 0; i < formStruct.Type().NumField(); i++ {
-		typeField := formStruct.Type().Field(i)
-		structField := formStruct.Field(i)
+	for fieldIdx := 0; fieldIdx < formStruct.Type().NumField(); fieldIdx++ {
+		typeField := formStruct.Type().Field(fieldIdx)
+		structField := formStruct.Field(fieldIdx)
 
 		if typeField.Type.Kind() == reflect.Ptr && typeField.Anonymous {
 			structField.Set(reflect.New(typeField.Type.Elem()))
