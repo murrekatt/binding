@@ -256,14 +256,19 @@ func mapFormField(typeField reflect.StructField,
 		}
 	} else if typeField.Type.Kind() == reflect.Struct {
 		mapForm(structField, form, formfile, errors)
-	} else if inputFieldName := typeField.Tag.Get("form"); inputFieldName != "" {
-		mapFormFieldValue(inputFieldName, typeField, structField, form, formfile, errors)
+	} else {
+		mapFormFieldValue(typeField, structField, form, formfile, errors)
 	}
 }
 
-func mapFormFieldValue(inputFieldName string, typeField reflect.StructField,
+func mapFormFieldValue(typeField reflect.StructField,
 	structField reflect.Value, form map[string][]string,
 	formfile map[string][]*multipart.FileHeader, errors Errors) {
+
+	inputFieldName := typeField.Tag.Get("form")
+	if inputFieldName == "" {
+		return
+	}
 
 	if !structField.CanSet() {
 		return
