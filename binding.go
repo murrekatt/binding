@@ -270,22 +270,22 @@ func mapFormFieldValue(inputFieldName string, typeField reflect.StructField,
 	}
 
 	inputValue, exists := form[inputFieldName]
-	if exists {
-		numElems := len(inputValue)
-		if structField.Kind() == reflect.Slice && numElems > 0 {
-			sliceOf := structField.Type().Elem().Kind()
-			slice := reflect.MakeSlice(structField.Type(), numElems, numElems)
-			for elemIdx := 0; elemIdx < numElems; elemIdx++ {
-				setWithProperType(sliceOf, inputValue[elemIdx], slice.Index(elemIdx), inputFieldName, errors)
-			}
-			structField.Set(slice)
-		} else {
-			setWithProperType(typeField.Type.Kind(), inputValue[0], structField, inputFieldName, errors)
-		}
+	if !exists {
+		mapFormFieldMultipart(inputFieldName, structField, formfile, errors)
 		return
 	}
 
-	mapFormFieldMultipart(inputFieldName, structField, formfile, errors)
+	numElems := len(inputValue)
+	if structField.Kind() == reflect.Slice && numElems > 0 {
+		sliceOf := structField.Type().Elem().Kind()
+		slice := reflect.MakeSlice(structField.Type(), numElems, numElems)
+		for elemIdx := 0; elemIdx < numElems; elemIdx++ {
+			setWithProperType(sliceOf, inputValue[elemIdx], slice.Index(elemIdx), inputFieldName, errors)
+		}
+		structField.Set(slice)
+	} else {
+		setWithProperType(typeField.Type.Kind(), inputValue[0], structField, inputFieldName, errors)
+	}
 }
 
 func mapFormFieldMultipart(inputFieldName string, structField reflect.Value,
